@@ -1,41 +1,4 @@
-const cols = 5;
-const rows = 5;
-
-let grid = makeArray(rows, cols);
-
-
-let randomGrid = randomGameOfLife(rows, cols);
-
-console.table(randomGrid);
-
-let nextGen = getNextGeneration(randomGrid, countNeighbours);
-
-console.table(nextGen);
-nextGen = getNextGeneration(nextGen, countNeighbours);
-
-console.table(nextGen);
-
-function makeArray(rows, cols, defaultValue=0) {
-    let arr = [];
-    for(let i = 0; i < rows; i++) {
-        arr[i] = [];
-        for(let j = 0; j < cols; j++) {
-            arr[i][j] = defaultValue;
-        }
-    }
-    return arr;
-}
-
-function randomGameOfLife(rows, cols){
-    let arr = [];
-    for(let i = 0; i < rows; i++) {
-        arr[i] = [];
-        for(let j = 0; j < cols; j++) {
-            arr[i][j] = Math.floor(Math.random()*2) === 1 ? 1: 0;
-        }
-    }
-    return arr;
-}
+const { validationResult } = require('express-validator');
 
 function countNeighbours(row, column, grid){
     let numOfNeighbours=0;
@@ -85,8 +48,17 @@ function getNextGeneration(grid){
             }
         }
     }
-
     return nextGen;
 }
 
-module.exports={getNextGeneration, randomGameOfLife}
+nextgen = (req, res) =>{
+    const result = validationResult(req);
+    if (!result.isEmpty()){        
+        return res.status(400).json(result.array());
+    }
+    let oldgen= req.body;
+    let nextgen = getNextGeneration(oldgen);
+    return res.json(nextgen);
+}
+
+module.exports = {countNeighbours, getNextGeneration, nextgen}
