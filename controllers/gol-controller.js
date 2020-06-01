@@ -52,13 +52,13 @@ function getNextGeneration(grid){
 }
 
 nextgen = (req, res) =>{
-    const result = validationResult(req);
-    if (!result.isEmpty()){        
-        return res.status(400).json(result.array());
+    const valResult = validationResult(req);
+    if (!valResult.isEmpty()){        
+        return res.status(400).json(valResult.array());
     }
     let oldgen= req.body;
     let nextgen = getNextGeneration(oldgen);
-    return res.json(nextgen);
+    return res.json(nextgen);    
 }
 
 module.exports = {countNeighbours, getNextGeneration, nextgen}
